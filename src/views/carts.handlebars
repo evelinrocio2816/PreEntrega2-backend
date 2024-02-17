@@ -1,1 +1,18 @@
-<h1>Acá tampoco hay nada todavia</h1>
+<h1>Carrito de compras</h1>
+
+
+
+<ul>
+    <div class="card-container" >
+  {{#each productList}}
+      <div class="card">
+        <img  src={{this.image}} alt="">
+        <h3> {{this.title}} </h3>
+        <p> {{this.description}} </p>
+        <h3>u$d: {{this.price}}</h3>
+        <h3>Cantidad: {{this.quantity}}</h3>
+    </div>
+
+  {{/each}}
+  </div>
+  </ul>
