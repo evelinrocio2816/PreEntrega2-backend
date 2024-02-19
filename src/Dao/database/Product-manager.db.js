@@ -35,14 +35,70 @@ class ProductManager {
       console.log("Error al agregar el producto", error);
     }
   }
-  async getProducts(limit , page) {
+
+
+  async getProducts({ limit = 10, page = 1, sort, query } = {}) {
     try {
-        const products = await ProductModels.paginate({},{limit , page})
-        return products
-    } catch (error) {
-        console.log("Error al obtener los productos",error);
+        const skip = (page - 1) * limit;
+
+        let queryOptions = {};
+
+        if (query) {
+            queryOptions = { category: query };
+        }
+
+        const sortOptions = {};
+        if (sort) {
+            if (sort === 'asc' || sort === 'desc') {
+                sortOptions.price = sort === 'asc' ? 1 : -1;
+            }
+        }
+
+        const products = await ProductModels
+            .find(queryOptions)
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(limit);
+
+        const totalProducts = await ProductModels.countDocuments(queryOptions);
+
+        const totalPages = Math.ceil(totalProducts / limit);
+        const hasPrevPage = page > 1;
+        const hasNextPage = page < totalPages;
+
+        return {
+            docs: products,
+            totalPages,
+            prevPage: hasPrevPage ? page - 1 : null,
+            nextPage: hasNextPage ? page + 1 : null,
+            page,
+            hasPrevPage,
+            hasNextPage,
+            prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
+            nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
+        };
+
+      } catch (error) {
+        console.log("Error al obtener los productos", error);
+        throw error;
     }
-  }
+}
+
+ // async getProducts(limit , page) {
+ //   try {
+ //       const products = await ProductModels.paginate({},{limit , page})
+ //       return products
+ //   } catch (error) {
+ //       console.log("Error al obtener los productos",error);
+ //   }
+ // }
+
+
+
+
+
+
+
   async getProductsById(id){
     try {
         const product = await ProductModels.findById(id)

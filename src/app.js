@@ -31,7 +31,7 @@ app.use(express.static("./src/public"))
 
 
 //Routes
-app.use("/api/products", productsRouter)
+app.use("/api", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/", viewRouter)
 
