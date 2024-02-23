@@ -5,7 +5,7 @@ class ProductManager {
     let { title, description, price, image, code, stock, category } =
       newObject;
     try {
-      if (!title || !description || !price || !image || !code || !stock || !category) {
+      if (!title || !description || !price || !code || !stock || !category) {
         console.log("Todos los campos deben ser completados");
         return;
       }
@@ -95,10 +95,6 @@ class ProductManager {
 
 
 
-
-
-
-
   async getProductsById(id){
     try {
         const product = await ProductModels.findById(id)
@@ -113,6 +109,8 @@ class ProductManager {
     }
   
   }
+
+
   async upDateProducts(id, productUpdated) {
     try {
     const updatedProduct= await ProductModels.findByIdAndUpdate(id, productUpdated)
@@ -130,6 +128,7 @@ return null;
     }
   }
 
+  
   async deleteProduct(id) {
     try {
      const Delete = await ProductModels.findByIdAndDelete(id);

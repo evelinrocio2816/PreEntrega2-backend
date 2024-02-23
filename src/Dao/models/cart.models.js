@@ -16,6 +16,12 @@ const CartSchema = new mongoose.Schema({
     },
   ],
 });
+// Middleware pre que realiza la población automáticamente
+CartSchema.pre('findOne', function (next) {
+  this.populate('products.product', '_id title price');
+  next();
+});
+
 CartSchema.plugin(mongoosePaginate)
 const CartModels =mongoose.model("carts", CartSchema)
 module.exports= CartModels;

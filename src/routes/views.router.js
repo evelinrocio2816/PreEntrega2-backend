@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
        }
   
        const productsInCarts = carts.products.map(item => ({
-          product: item.product.toObject(),
+          product: item.product,
           //Lo convertimos a objeto para pasar las restricciones de Exp Handlebars. 
           quantity: item.quantity
        }));

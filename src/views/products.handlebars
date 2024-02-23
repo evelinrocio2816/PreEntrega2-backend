@@ -18,10 +18,10 @@
 
  <div class="container-pages">
 {{#if hasPrevPage}}
-<a href="/products/?limit{{limit}}&page={{prevPage}}">Anterior</a>
+  <a href="/products?page={{prevPage}}"> Anterior </a>
 {{/if}}
 <h4>Pagina {{currentPage}} de {{totalPage}} </h4>
  {{#if hasNextPage}}
-  <a href="/products/?limit={{limit}}&page={{nextPage}}">Siguiente</a>
+   <a href="/products?page={{nextPage}}"> Siguiente </a>
   {{/if}}
 </div>

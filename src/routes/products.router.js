@@ -4,12 +4,49 @@ const fs = require('fs').promises;
 
 
 const ProductManager = require("../Dao/database/Product-manager.db.js");
-const { log } = require("console");
 const productManager =new ProductManager()
 
 //Router
 
+
+router.get("/", async (req, res) => {
+  try {
+      const { limit = 10, page = 1, sort, query } = req.query;
+
+      const productos = await productManager.getProducts({
+          limit: parseInt(limit),
+          page: parseInt(page),
+          sort,
+          query,
+      });
+
+      res.json({
+          status: 'success',
+          payload: productos,
+          totalPages: productos.totalPages,
+          prevPage: productos.prevPage,
+          nextPage: productos.nextPage,
+          page: productos.page,
+          hasPrevPage: productos.hasPrevPage,
+          hasNextPage: productos.hasNextPage,
+          prevLink: productos.hasPrevPage ? `/api/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&query=${query}` : null,
+          nextLink: productos.hasNextPage ? `/api/products?limit=${limit}&page=${productos.nextPage}&sort=${sort}&query=${query}` : null,
+      });
+
+  } catch (error) {
+      console.error("Error al obtener productos", error);
+      res.status(500).json({
+          status: 'error',
+          error: "Error interno del servidor"
+      });
+  }
+});
+
+
+
+
 //Agregar Productos
+
 router.post("/products", async (req, res) => {
   try {
     const newProduct = req.body;
@@ -44,6 +81,11 @@ router.put("/products/:pid", async (req, res) => {
       if (missingFields.length > 0) {
           return res.status(400).json({ status: "error", message: `Los campos ${missingFields.join(', ')} son obligatorios` });
       }
+
+
+
+
+
 
       // Actualizar el producto
       await productManager.upDateProducts(productIdToUpdate, updatedProductData);
