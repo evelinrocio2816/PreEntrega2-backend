@@ -6,10 +6,16 @@ const cartsManager= new CartManager()
 const router = express.Router()
 const fs = require('fs').promises;
 
-
+//Home
 router.get("/", async (req, res) => {
   res.render("home",{title:"home"})
  });
+
+//Carts
+router.get("/carts", async (req, res) => {
+   res.render("carts",{title:"carts"})
+  });
+
  router.get("/carts/:cid", async (req, res) => {
     const cartId = req.params.cid;
   
@@ -35,11 +41,14 @@ router.get("/", async (req, res) => {
     }
   });
 
- 
+ //Chat
  
 router.get("/chat", async (req, res) => {
    res.render("chat",{title:"chat"})
   });
+//Products
+
+
 
   router.get("/products", async (req, res) => {
    try {
