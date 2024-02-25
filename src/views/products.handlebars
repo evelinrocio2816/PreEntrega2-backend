@@ -3,7 +3,7 @@
    
 <ul>
     <div class="card-container" >
-  {{#each productList}}
+  {{#each products}}
       <div class="card">
         <img  src={{this.image}} alt="">
         <h3> {{this.title}} </h3>
@@ -20,7 +20,7 @@
 {{#if hasPrevPage}}
   <a href="/products?page={{prevPage}}"> Anterior </a>
 {{/if}}
-<h4>Pagina {{currentPage}} de {{totalPage}} </h4>
+<h4>Pagina {{currentPage}} de {{totalPages}} </h4>
  {{#if hasNextPage}}
    <a href="/products?page={{nextPage}}"> Siguiente </a>
   {{/if}}

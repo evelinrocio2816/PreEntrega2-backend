@@ -41,28 +41,35 @@ router.get("/chat", async (req, res) => {
    res.render("chat",{title:"chat"})
   });
 
- router.get("/products", async (req, res) => {
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 5;
-  try {
-      const productList = await productManager.getProducts(limit, page );
-      console.log(productList);
-
-      res.render("products",{
-          productList: productList.docs,
-          hasPrevPage: productList.hasPrevPage,
-          hasNextPage: productList.hasNextPage,
-          prevPage: productList.prevPage,
-          nextPage: productList.nextPage,
-          currentPage: productList.page,
-          totalPages: productList.totalPages,
-          limit: productList.limit,
-          title: "Products"
+  router.get("/products", async (req, res) => {
+   try {
+      const { page = 4, limit = 4 } = req.query;
+      const products = await productManager.getProducts({
+         page: parseInt(page),
+         limit: parseInt(limit)
       });
-      
-  } catch (error) {
-      console.error("Error al obtener productos", error);
-      res.status(500).json({ error: "error interno del servidor" });
-  }
-});
+ 
+      const newArray = products.docs.map(prod => {
+         const { _id, ...rest } = prod.toObject();
+         return rest;
+      });
+ 
+      res.render("products", {
+         products: newArray,
+         hasPrevPage: products.hasPrevPage,
+         hasNextPage: products.hasNextPage,
+         prevPage: products.prevPage,
+         nextPage: products.nextPage,
+         currentPage: products.page,
+         totalPages: products.totalPages
+      });
+ 
+   } catch (error) {
+      console.error("Error al obtener products", error);
+      res.status(500).json({
+         status: 'error',
+         error: "Error interno del servidor"
+      });
+   }
+ });
  module.exports = router;

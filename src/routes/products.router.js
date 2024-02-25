@@ -11,9 +11,9 @@ const productManager =new ProductManager()
 
 router.get("/", async (req, res) => {
   try {
-      const { limit = 10, page = 1, sort, query } = req.query;
+      const { limit = 4, page = 4, sort, query } = req.query;
 
-      const productos = await productManager.getProducts({
+      const products = await productManager.getProducts({
           limit: parseInt(limit),
           page: parseInt(page),
           sort,
@@ -22,19 +22,19 @@ router.get("/", async (req, res) => {
 
       res.json({
           status: 'success',
-          payload: productos,
-          totalPages: productos.totalPages,
-          prevPage: productos.prevPage,
-          nextPage: productos.nextPage,
-          page: productos.page,
-          hasPrevPage: productos.hasPrevPage,
-          hasNextPage: productos.hasNextPage,
-          prevLink: productos.hasPrevPage ? `/api/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&query=${query}` : null,
-          nextLink: productos.hasNextPage ? `/api/products?limit=${limit}&page=${productos.nextPage}&sort=${sort}&query=${query}` : null,
+          payload: products,
+          totalPages: products.totalPages,
+          prevPage: products.prevPage,
+          nextPage: products.nextPage,
+          page: products.page,
+          hasPrevPage: products.hasPrevPage,
+          hasNextPage: products.hasNextPage,
+          prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
+          nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
       });
 
   } catch (error) {
-      console.error("Error al obtener productos", error);
+      console.error("Error al obtener products", error);
       res.status(500).json({
           status: 'error',
           error: "Error interno del servidor"
@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
 
 
 
-//Agregar Productos
+//Agregar products
 
 router.post("/products", async (req, res) => {
   try {
@@ -124,7 +124,7 @@ router.delete("/products/:pid", async (req, res) => {
   }
 });
 
-  //Limit listar productos
+  //Limit listar products
   
   router.get("/products", async (req, res) => {
     const page = req.query.page || 1;
@@ -134,7 +134,7 @@ router.delete("/products/:pid", async (req, res) => {
         console.log(productList);
         res.status(200).json({productList});
     } catch (error) {
-        console.error("Error al obtener productos", error);
+        console.error("Error al obtener products", error);
         res.status(500).json({ error: "error interno del servidor" });
     }
 });
@@ -155,7 +155,7 @@ router.delete("/products/:pid", async (req, res) => {
       res.json(product)
 
     } catch (error) {
-      console.error("error al obtener Productos", error);
+      console.error("error al obtener products", error);
       res.status(500).json({error:"error interno del servidor"})
     }
   })
