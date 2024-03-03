@@ -84,16 +84,6 @@ class ProductManager {
     }
 }
 
- // async getProducts(limit , page) {
- //   try {
- //       const products = await ProductModels.paginate({},{limit , page})
- //       return products
- //   } catch (error) {
- //       console.log("Error al obtener los productos",error);
- //   }
- // }
-
-
 
   async getProductsById(id){
     try {

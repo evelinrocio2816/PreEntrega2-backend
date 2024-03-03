@@ -11,7 +11,7 @@ const productManager =new ProductManager()
 
 router.get("/", async (req, res) => {
   try {
-      const { limit = 4, page = 4, sort, query } = req.query;
+      const { limit , page, sort, query } = req.query;
 
       const products = await productManager.getProducts({
           limit: parseInt(limit),
@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
 
 //Agregar products
 
-router.post("/products", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const newProduct = req.body;
     
@@ -57,14 +57,14 @@ router.post("/products", async (req, res) => {
        return res.status(400).json({ status: "error", message: "El ID del producto ya existe" });
      }
      await productManager.addProduct(newProduct);
-    res.json({ status: "success", message: "Producto Creado" });
+    res.json({ status: "success", message: "Producto Agregado" });
   } catch (error) {
     console.error("Error al procesar la solicitud:", error);
     res.status(500).json({ status: "error", message: "Error interno del servidor" });
   }
 });
 
-router.put("/products/:pid", async (req, res) => {
+router.put("/:pid", async (req, res) => {
   try {
       const productIdToUpdate = req.params.pid;
       const updatedProductData = req.body;
@@ -75,16 +75,13 @@ router.put("/products/:pid", async (req, res) => {
           return res.status(404).json({ status: "error", message: "El producto no se encontró" });
       }
 
+
       // Validación de campos obligatorios
       const requiredFields = ['title', 'description', 'price', 'code', 'stock', 'category'];
       const missingFields = requiredFields.filter(field => !updatedProductData[field]);
       if (missingFields.length > 0) {
           return res.status(400).json({ status: "error", message: `Los campos ${missingFields.join(', ')} son obligatorios` });
       }
-
-
-
-
 
 
       // Actualizar el producto
@@ -101,10 +98,8 @@ router.put("/products/:pid", async (req, res) => {
 
 
 
-
-
  //Ruta DELETE para eliminar un producto por ID
-router.delete("/products/:pid", async (req, res) => {
+router.delete("/:pid", async (req, res) => {
   try {
     const productIdToDelete = req.params.pid;
     const existingProduct = await productManager.getProductsById(productIdToDelete);
@@ -123,27 +118,11 @@ router.delete("/products/:pid", async (req, res) => {
     res.status(500).json({ status: "error", message: "Error interno del servidor" });
   }
 });
-
-  //Limit listar products
-  
-  router.get("/products", async (req, res) => {
-    const page = req.query.page || 1;
-    const limit = req.query.limit ||  5;
-    try {
-        const productList = await productManager.getProducts( limit, page );
-        console.log(productList);
-        res.status(200).json({productList});
-    } catch (error) {
-        console.error("Error al obtener products", error);
-        res.status(500).json({ error: "error interno del servidor" });
-    }
-});
-
   
   
   //busqueda por id
 
-  router.get("/products/:pid",async(req, res)=>{
+  router.get("/:pid",async(req, res)=>{
     const id= req.params.pid
     try {
       const product = await productManager.getProductsById(id)

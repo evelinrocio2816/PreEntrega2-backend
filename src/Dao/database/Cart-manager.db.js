@@ -18,7 +18,7 @@ class CartManager {
             console.log("No existe ese carrito");
             return null
         }
-       // return cart
+        return cart
         // { status: 200, cart };
     } catch (error) {
         console.log("error al traer el carrito");
@@ -71,10 +71,10 @@ class CartManager {
         const cart = await CartModels.findById(cartId);
 
         if (!cart) {
-            throw new Error('Carrito no encontrado');
+          console.log('Carrito no encontrado');
+          return
         }//
 
-        //cart.products = cart.products.filter(item => item.product.toString() !== productId);
         cart.products = cart.products.filter(item => item.product._id.toString() !== productId);
 
         await cart.save();
